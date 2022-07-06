@@ -16,5 +16,6 @@
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
         "source.organizeImports": true
-    }
+    },
+    "esbonio.sphinx.confDir": ""
 }
