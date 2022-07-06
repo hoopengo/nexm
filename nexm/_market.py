@@ -4,7 +4,10 @@ from typing import Any
 
 from nextcord import Interaction
 
-from ._defaults import DB_PATH
+from ._db import Handler
+from ._defaults import DB_PATH, SQLITE_PATH
+
+markets = Handler(SQLITE_PATH)
 
 
 class Market:
@@ -12,6 +15,8 @@ class Market:
 
     def __init__(self, interaction: Interaction) -> None:
         self._set_inter(interaction)
+
+        markets.insert(interaction.id, int(interaction.expires_at.timestamp()))
 
     def get(self, key: str) -> Any:
         """Get value from db by key

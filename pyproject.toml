@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "nexm"
 version = "0.0.1"
-description = ""
+description = "Nexm is key-value storage for nextcord"
 authors = ["hoopengo <hoopengo@yandex.ru>"]
 
 [tool.poetry.dependencies]
@@ -20,6 +20,7 @@ isort = "^5.10.1"
 mypy-extensions = "^0.4.3"
 pep8-naming = "^0.13.0"
 pytest-cov = "^3.0.0"
+pre-commit = "^2.19.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

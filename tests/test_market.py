@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 
 import pytest
 from nexm import Market
@@ -7,9 +8,10 @@ from nexm import Market
 @dataclass
 class Interaction:
     id: int
+    expires_at: datetime
 
 
-some_inter = Interaction(123)
+some_inter = Interaction(123, datetime.utcnow())
 
 
 def test_get():
@@ -44,7 +46,7 @@ def test_update_interaction():
     store = Market(some_inter)
     store.set("some_val", 123)
 
-    new_inter = Interaction(321)
+    new_inter = Interaction(321, datetime.utcnow())
 
     store.update_interaction(new_inter)
     assert store.get("some_val") == 123
