@@ -1,13 +1,26 @@
 import os
 import shelve
+from datetime import datetime
 from typing import Any
 
 from nextcord import Interaction
+from nextcord.ext import tasks
 
 from ._db import Handler
 from ._defaults import DB_PATH, SQLITE_PATH
 
 markets = Handler(SQLITE_PATH)
+
+
+@tasks.loop(minutes=2)
+async def check_expired_interactions():
+    for inter in markets.fetchall():
+        if inter[2] - datetime.utcnow().timestamp() < 0:
+            os.remove(DB_PATH + str(inter[1]))
+            markets.remove(inter[1])
+
+
+check_expired_interactions.start()
 
 
 class Market:

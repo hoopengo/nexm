@@ -62,6 +62,21 @@ class Handler:
             cursor.close()
             db.close()
 
+    def fetchall(self) -> Any:
+        try:
+            db = sqlite3.connect(self.db_name)
+            cursor = db.cursor()
+
+            cursor.execute("SELECT * FROM markets")
+            return cursor.fetchall()
+
+        except Exception:
+            return None
+
+        finally:
+            cursor.close()
+            db.close()
+
     def remove(self, inter_id: int) -> bool:
         try:
             db = sqlite3.connect(self.db_name)
