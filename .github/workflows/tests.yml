@@ -1,0 +1,45 @@
+name: Tests
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        python-version:
+          - '3.8'
+          - '3.9'
+          - '3.10'
+          - 'pypy-3.8'
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: ACTIONS_ALLOW_UNSECURE_COMMANDS
+        run: echo 'ACTIONS_ALLOW_UNSECURE_COMMANDS=true' >> $GITHUB_ENV
+
+      - name: Install Poetry
+        uses: dschep/install-poetry-action@v1
+
+      - name: Install Dependencies
+        run: poetry install
+
+      - name: Code Quality
+        run: |
+          poetry run black . --check --exclude get-poetry.py
+          poetry run flake8 . --count --exit-zero --statistics --exclude get-poetry.py
+
+      - name: Test with pytest
+        run: poetry run python -m pytest --cov tests/test_*
